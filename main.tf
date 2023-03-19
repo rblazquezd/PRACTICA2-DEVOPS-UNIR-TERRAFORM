@@ -38,17 +38,17 @@ resource "azurerm_public_ip" "pip" {
   sku                 = "Standard"
 }
 
-resource "azurerm_public_ip" "vm1pip" {
-  name                = "vm1_pip"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
-  allocation_method   = "Dynamic"
-  #sku                 = "Standard"
+# resource "azurerm_public_ip" "vm1pip" {
+#  name                = "vm1_pip"
+#  resource_group_name = azurerm_resource_group.rg.name
+#  location            = azurerm_resource_group.rg.location
+#  allocation_method   = "Dynamic"
+#  #sku                 = "Standard"
 
-  tags = {
-    environment = "staging"
-  }
-}
+#  tags = {
+#    environment = "staging"
+#  }
+#}
 
 
 #  La IP pública del nodo VM2 que es el servidor central de Ansible para intalar y configurar todos los productos de la práctica.
@@ -75,7 +75,7 @@ resource "azurerm_network_interface" "vm1nic" {
     subnet_id                     = azurerm_subnet.subnet.id
     private_ip_address_allocation = "Static"
     private_ip_address  = "10.0.0.5"
-    public_ip_address_id = azurerm_public_ip.vm1pip.id 
+   # public_ip_address_id = azurerm_public_ip.vm1pip.id 
   }
 }
 
@@ -325,26 +325,26 @@ resource "azurerm_container_registry" "acr" {
 
 
 # Creamos el cluster de Kubernetes.
-# resource "azurerm_kubernetes_cluster" "clusterkube" {
-# name                = "akspractica21"
-#  location            = azurerm_resource_group.rg.location
-#  resource_group_name = azurerm_resource_group.rg.name
-#  dns_prefix          = "dnsaks1practica21"
+resource "azurerm_kubernetes_cluster" "clusterkube" {
+    name                = "akspractica21"
+    location            = azurerm_resource_group.rg.location
+    resource_group_name = azurerm_resource_group.rg.name
+    dns_prefix          = "dnsaks1practica21"
 
-#  default_node_pool {
-#    name       = "default"
-#    node_count = 1
-#    vm_size    = "Standard_D2_v2"
-#  }
+  default_node_pool {
+    name       = "default"
+    node_count = 1
+    vm_size    = "Standard_D2_v2"
+  }
 
-#  identity {
-#    type = "SystemAssigned"
-#  }
+  identity {
+    type = "SystemAssigned"
+  }
 
-#  tags = {
-#    Environment = "Production"
-#  }
-# }
+  tags = {
+    Environment = "Production"
+  }
+ }
 
 
 

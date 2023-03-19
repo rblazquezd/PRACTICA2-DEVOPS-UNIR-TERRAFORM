@@ -41,13 +41,13 @@ output "containerregistry_adminpassword" {
   sensitive = true
 }
 
-# output "aks_clientcertificate" {
-#  value     = azurerm_kubernetes_cluster.clusterkube.kube_config.0.client_certificate
-#  sensitive = true
-# }
+output "aks_clientcertificate" {
+  value     = azurerm_kubernetes_cluster.clusterkube.kube_config.0.client_certificate
+  sensitive = true
+}
 
-# output "aks_kubeconfig" {
-#  value = azurerm_kubernetes_cluster.clusterkube.kube_config_raw
-#  sensitive = true
-# }
+output "aks_kubeconfig" {
+  value = azurerm_kubernetes_cluster.clusterkube.kube_config_raw
+  sensitive = true
+}
 
