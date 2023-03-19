@@ -38,6 +38,18 @@ resource "azurerm_public_ip" "pip" {
   sku                 = "Standard"
 }
 
+resource "azurerm_public_ip" "vm1pip" {
+  name                = "vm1_pip"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+  allocation_method   = "Dynamic"
+  #sku                 = "Standard"
+
+  tags = {
+    environment = "staging"
+  }
+}
+
 
 #  La IP pública del nodo VM2 que es el servidor central de Ansible para intalar y configurar todos los productos de la práctica.
 resource "azurerm_public_ip" "vm2pip" {
@@ -63,6 +75,7 @@ resource "azurerm_network_interface" "vm1nic" {
     subnet_id                     = azurerm_subnet.subnet.id
     private_ip_address_allocation = "Static"
     private_ip_address  = "10.0.0.5"
+    public_ip_address_id = azurerm_public_ip.vm1pip.id 
   }
 }
 
@@ -226,8 +239,8 @@ resource "azurerm_linux_virtual_machine" "vm2" {
       "sudo sh -c 'echo 10.0.0.5 >> /etc/ansible/hosts'",
       "mkdir ~/workspaces",
       "mkdir ~/workspaces/unir-practica2",
-      "mkdir ~/workspaces/unir-practica2/PRACTICA2-DEVOPS-UNIR-TERRAFORM",
-      "git clone https://github.com/rblazquezd/PRACTICA2-DEVOPS-UNIR-ANSIBLE.git ~/workspaces/unir-practica2/PRACTICA2-DEVOPS-UNIR-TERRAFORM",
+      "mkdir ~/workspaces/unir-practica2/PRACTICA2-DEVOPS-UNIR-ANSIBLE",
+      "git clone https://github.com/rblazquezd/PRACTICA2-DEVOPS-UNIR-ANSIBLE.git ~/workspaces/unir-practica2/PRACTICA2-DEVOPS-UNIR-ANSIBLE",
       "scp -oStrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ~/.ssh/id_rsa_operatorazure ~/.ssh/id_rsa.pub operatorazure@10.0.0.5:/home/operatorazure/.ssh/id_rsa.pub",
       "ssh -oStrictHostKeyChecking=no -i ~/.ssh/id_rsa_operatorazure operatorazure@10.0.0.5 'cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys'",
       "ssh -oStrictHostKeyChecking=no -i ~/.ssh/id_rsa_operatorazure operatorazure@10.0.0.5 'rm -f ~/.ssh/id_rsa.pub'",
@@ -243,8 +256,8 @@ resource "azurerm_linux_virtual_machine" "vm2" {
       "ssh -oStrictHostKeyChecking=no -i ~/.ssh/id_rsa_operatorazure operatorazure@10.0.0.5 'podman info'",
       "ansible-galaxy collection install azure.azcollection",
       "ansible-galaxy collection install containers.podman"
-     # "ansible-playbook ~/workspaces/unir-practica2/PRACTICA2-DEVOPS-UNIR-TERRAFORM/playbook-build-webserver-vm2.yml -u operatorazure",
-     # "ansible-playbook ~/workspaces/unir-practica2/PRACTICA2-DEVOPS-UNIR-TERRAFORM/playbook-manage-and-configure-webserver-vm1.yml -u operatorazure"
+     # "ansible-playbook ~/workspaces/unir-practica2/PRACTICA2-DEVOPS-UNIR-ANSIBLE/playbook-build-webserver-vm2.yml -u operatorazure",
+     # "ansible-playbook ~/workspaces/unir-practica2/PRACTICA2-DEVOPS-UNIR-ANSIBLE/playbook-manage-and-configure-webserver-vm1.yml -u operatorazure"
 
 
 
@@ -312,26 +325,26 @@ resource "azurerm_container_registry" "acr" {
 
 
 # Creamos el cluster de Kubernetes.
-resource "azurerm_kubernetes_cluster" "clusterkube" {
-  name                = "akspractica21"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-  dns_prefix          = "dnsaks1practica21"
+# resource "azurerm_kubernetes_cluster" "clusterkube" {
+# name                = "akspractica21"
+#  location            = azurerm_resource_group.rg.location
+#  resource_group_name = azurerm_resource_group.rg.name
+#  dns_prefix          = "dnsaks1practica21"
 
-  default_node_pool {
-    name       = "default"
-    node_count = 1
-    vm_size    = "Standard_D2_v2"
-  }
+#  default_node_pool {
+#    name       = "default"
+#    node_count = 1
+#    vm_size    = "Standard_D2_v2"
+#  }
 
-  identity {
-    type = "SystemAssigned"
-  }
+#  identity {
+#    type = "SystemAssigned"
+#  }
 
-  tags = {
-    Environment = "Production"
-  }
-}
+#  tags = {
+#    Environment = "Production"
+#  }
+# }
 
 
 
