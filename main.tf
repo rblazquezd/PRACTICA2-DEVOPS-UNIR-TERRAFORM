@@ -242,9 +242,9 @@ resource "azurerm_linux_virtual_machine" "vm2" {
       "ssh -oStrictHostKeyChecking=no -i ~/.ssh/id_rsa_operatorazure operatorazure@10.0.0.5 'sudo apt-get install podman -y'",
       "ssh -oStrictHostKeyChecking=no -i ~/.ssh/id_rsa_operatorazure operatorazure@10.0.0.5 'podman info'",
       "ansible-galaxy collection install azure.azcollection",
-      "ansible-galaxy collection install containers.podman",
-      "ansible-playbook ~/workspaces/unir-practica2/PRACTICA2-DEVOPS-UNIR-TERRAFORM/playbook-build-webserver-vm2.yml -u operatorazure",
-      "ansible-playbook ~/workspaces/unir-practica2/PRACTICA2-DEVOPS-UNIR-TERRAFORM/playbook-manage-and-configure-webserver-vm1.yml -u operatorazure"
+      "ansible-galaxy collection install containers.podman"
+     # "ansible-playbook ~/workspaces/unir-practica2/PRACTICA2-DEVOPS-UNIR-TERRAFORM/playbook-build-webserver-vm2.yml -u operatorazure",
+     # "ansible-playbook ~/workspaces/unir-practica2/PRACTICA2-DEVOPS-UNIR-TERRAFORM/playbook-manage-and-configure-webserver-vm1.yml -u operatorazure"
 
 
 
